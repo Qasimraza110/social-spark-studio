@@ -1,5 +1,5 @@
 import { Eye, Heart, Users, Video, Bell, Search } from "lucide-react";
-import { Sidebar } from "@/components/layout/Sidebar";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { PlatformCard } from "@/components/dashboard/PlatformCard";
 import { UploadZone } from "@/components/dashboard/UploadZone";
@@ -47,73 +47,69 @@ const platforms = [
   { name: "LinkedIn", icon: <LinkedInIcon />, connected: false, followers: "", colorClass: "bg-linkedin/20" },
 ];
 
-export default function Index() {
+export default function Dashboard() {
   return (
-    <div className="min-h-screen bg-background">
-      <Sidebar />
-      
-      <main className="ml-64">
-        {/* Header */}
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background/80 backdrop-blur-sm px-8">
-          <div className="relative w-80">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Search content, analytics..."
-              className="w-full rounded-lg bg-secondary/50 py-2 pl-10 pr-4 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/50"
-            />
-          </div>
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="h-5 w-5" />
-              <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-destructive" />
-            </Button>
-            <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary to-accent" />
-          </div>
-        </header>
+    <DashboardLayout>
+      {/* Header */}
+      <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background/80 backdrop-blur-sm px-8">
+        <div className="relative w-80">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <input
+            type="text"
+            placeholder="Search content, analytics..."
+            className="w-full rounded-lg bg-secondary/50 py-2 pl-10 pr-4 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/50"
+          />
+        </div>
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="icon" className="relative">
+            <Bell className="h-5 w-5" />
+            <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-destructive" />
+          </Button>
+          <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary to-accent" />
+        </div>
+      </header>
 
-        {/* Content */}
-        <div className="p-8">
-          {/* Welcome */}
-          <div className="mb-8">
-            <h1 className="font-display text-3xl font-bold">
-              Welcome back, <span className="gradient-text">Creator</span>
-            </h1>
-            <p className="mt-1 text-muted-foreground">
-              Here's what's happening with your content today.
-            </p>
-          </div>
+      {/* Content */}
+      <div className="p-8">
+        {/* Welcome */}
+        <div className="mb-8">
+          <h1 className="font-display text-3xl font-bold">
+            Welcome back, <span className="gradient-text">Creator</span>
+          </h1>
+          <p className="mt-1 text-muted-foreground">
+            Here's what's happening with your content today.
+          </p>
+        </div>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-4 gap-4 mb-8">
-            {stats.map((stat, index) => (
-              <StatsCard key={stat.title} {...stat} delay={index * 100} />
+        {/* Stats Grid */}
+        <div className="grid grid-cols-4 gap-4 mb-8">
+          {stats.map((stat, index) => (
+            <StatsCard key={stat.title} {...stat} delay={index * 100} />
+          ))}
+        </div>
+
+        {/* Platforms */}
+        <div className="mb-8">
+          <h2 className="font-display text-xl font-semibold mb-4">Connected Platforms</h2>
+          <div className="grid grid-cols-4 gap-4">
+            {platforms.map((platform, index) => (
+              <PlatformCard key={platform.name} {...platform} delay={index * 100 + 200} />
             ))}
           </div>
+        </div>
 
-          {/* Platforms */}
-          <div className="mb-8">
-            <h2 className="font-display text-xl font-semibold mb-4">Connected Platforms</h2>
-            <div className="grid grid-cols-4 gap-4">
-              {platforms.map((platform, index) => (
-                <PlatformCard key={platform.name} {...platform} delay={index * 100 + 200} />
-              ))}
-            </div>
+        {/* Main Grid */}
+        <div className="grid grid-cols-3 gap-6">
+          <div className="col-span-2 space-y-6">
+            <UploadZone />
+            <RecentContent />
           </div>
-
-          {/* Main Grid */}
-          <div className="grid grid-cols-3 gap-6">
-            <div className="col-span-2 space-y-6">
-              <UploadZone />
-              <RecentContent />
-            </div>
-            <div className="space-y-6">
-              <AIInsights />
-              <SchedulePreview />
-            </div>
+          <div className="space-y-6">
+            <AIInsights />
+            <SchedulePreview />
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }
