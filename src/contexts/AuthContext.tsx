@@ -26,55 +26,64 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const requireAuth = () => {
+  if (!auth) {
+    throw { code: "app/firebase-not-configured" } as { code: string };
+  }
+  return auth;
+};
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let unsubscribe: (() => void) | undefined;
-    
-    try {
-      unsubscribe = onAuthStateChanged(auth, (user) => {
-        setUser(user);
-        setLoading(false);
-      });
-    } catch (error) {
-      console.error("Auth state change error:", error);
+    if (!auth) {
       setLoading(false);
+      return;
     }
 
-    return () => {
-      if (unsubscribe) unsubscribe();
-    };
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password);
+    const a = requireAuth();
+    await signInWithEmailAndPassword(a, email, password);
   };
 
   const signUp = async (email: string, password: string, name: string) => {
-    const result = await createUserWithEmailAndPassword(auth, email, password);
+    const a = requireAuth();
+    const result = await createUserWithEmailAndPassword(a, email, password);
     if (result.user) {
       await updateProfile(result.user, { displayName: name });
     }
   };
 
   const logOut = async () => {
-    await signOut(auth);
+    const a = requireAuth();
+    await signOut(a);
   };
 
   const signInWithGoogle = async () => {
+    const a = requireAuth();
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    await signInWithPopup(a, provider);
   };
 
   const signInWithGithub = async () => {
+    const a = requireAuth();
     const provider = new GithubAuthProvider();
-    await signInWithPopup(auth, provider);
+    await signInWithPopup(a, provider);
   };
 
   const resetPassword = async (email: string) => {
-    await sendPasswordResetEmail(auth, email);
+    const a = requireAuth();
+    await sendPasswordResetEmail(a, email);
   };
 
   const value = {
@@ -98,3 +107,4 @@ export function useAuth() {
   }
   return context;
 }
+
