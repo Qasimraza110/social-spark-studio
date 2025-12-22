@@ -8,6 +8,7 @@ import { Zap, Mail, Lock, User, ArrowLeft, Eye, EyeOff, AlertTriangle } from "lu
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { firebaseConfigured, firebaseConfigMissingFields } from "@/lib/firebase";
+import { readFirebaseWebConfig, writeFirebaseWebConfig, type FirebaseWebConfig } from "@/lib/firebaseWebConfig";
 import { z } from "zod";
 
 const authSchema = z.object({
@@ -16,20 +17,41 @@ const authSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
+const firebaseWebConfigSchema = z.object({
+  apiKey: z.string().min(1, "API key is required"),
+  authDomain: z.string().min(1, "Auth domain is required"),
+  projectId: z.string().min(1, "Project ID is required"),
+  appId: z.string().min(1, "App ID is required"),
+});
+
 export default function Auth() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user, signIn, signUp, signInWithGoogle, signInWithGithub, resetPassword } = useAuth();
-  
+
   const [isSignUp, setIsSignUp] = useState(searchParams.get("mode") === "signup");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [savingFirebaseConfig, setSavingFirebaseConfig] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    password: ""
+    password: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [firebaseSetup, setFirebaseSetup] = useState<FirebaseWebConfig>(() => {
+    const existing = readFirebaseWebConfig();
+    return {
+      apiKey: existing?.apiKey ?? "",
+      authDomain: existing?.authDomain ?? "",
+      projectId: existing?.projectId ?? "",
+      appId: existing?.appId ?? "",
+    };
+  });
+
+  useEffect(() => {
+    document.title = isSignUp ? "Sign up | ContentAI" : "Sign in | ContentAI";
+  }, [isSignUp]);
 
   useEffect(() => {
     if (user) {
@@ -63,9 +85,9 @@ export default function Auth() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
-    
+
     setLoading(true);
-    
+
     try {
       if (isSignUp) {
         await signUp(formData.email, formData.password, formData.name);
@@ -113,6 +135,24 @@ export default function Auth() {
       toast.success("Password reset email sent!");
     } catch (error: any) {
       toast.error(getFirebaseErrorMessage(error.code));
+    }
+  };
+
+  const handleSaveFirebaseConfig = () => {
+    setSavingFirebaseConfig(true);
+    try {
+      const parsed = firebaseWebConfigSchema.parse(firebaseSetup);
+      writeFirebaseWebConfig(parsed);
+      toast.success("Firebase config saved. Reloading...");
+      window.location.reload();
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast.error(error.errors[0]?.message ?? "Please fill in all Firebase fields.");
+        return;
+      }
+      toast.error("Could not save Firebase config.");
+    } finally {
+      setSavingFirebaseConfig(false);
     }
   };
 
@@ -168,9 +208,7 @@ export default function Auth() {
             {isSignUp ? "Create your account" : "Welcome back"}
           </h1>
           <p className="text-sm sm:text-base text-muted-foreground mb-6 lg:mb-8">
-            {isSignUp 
-              ? "Start your journey to automated content distribution" 
-              : "Sign in to access your dashboard"}
+            {isSignUp ? "Start your journey to automated content distribution" : "Sign in to access your dashboard"}
           </p>
 
           {!firebaseConfigured && (
@@ -180,7 +218,8 @@ export default function Auth() {
               <AlertDescription>
                 Add your Firebase Web App config (API key, Auth domain, Project ID, App ID) to enable login.
                 {" "}
-                Missing: {[
+                Missing:{" "}
+                {[
                   firebaseConfigMissingFields.apiKey ? "API key" : null,
                   firebaseConfigMissingFields.authDomain ? "Auth domain" : null,
                   firebaseConfigMissingFields.projectId ? "Project ID" : null,
@@ -188,6 +227,62 @@ export default function Auth() {
                 ]
                   .filter(Boolean)
                   .join(", ")}
+
+                <div className="mt-4 grid gap-3">
+                  <div className="grid gap-2">
+                    <Label htmlFor="fb-api-key">API key</Label>
+                    <Input
+                      id="fb-api-key"
+                      value={firebaseSetup.apiKey}
+                      onChange={(e) => setFirebaseSetup((v) => ({ ...v, apiKey: e.target.value }))}
+                      placeholder="AIza..."
+                      autoComplete="off"
+                    />
+                  </div>
+
+                  <div className="grid gap-2">
+                    <Label htmlFor="fb-auth-domain">Auth domain</Label>
+                    <Input
+                      id="fb-auth-domain"
+                      value={firebaseSetup.authDomain}
+                      onChange={(e) => setFirebaseSetup((v) => ({ ...v, authDomain: e.target.value }))}
+                      placeholder="your-project.firebaseapp.com"
+                      autoComplete="off"
+                    />
+                  </div>
+
+                  <div className="grid gap-2">
+                    <Label htmlFor="fb-project-id">Project ID</Label>
+                    <Input
+                      id="fb-project-id"
+                      value={firebaseSetup.projectId}
+                      onChange={(e) => setFirebaseSetup((v) => ({ ...v, projectId: e.target.value }))}
+                      placeholder="your-project-id"
+                      autoComplete="off"
+                    />
+                  </div>
+
+                  <div className="grid gap-2">
+                    <Label htmlFor="fb-app-id">App ID</Label>
+                    <Input
+                      id="fb-app-id"
+                      value={firebaseSetup.appId}
+                      onChange={(e) => setFirebaseSetup((v) => ({ ...v, appId: e.target.value }))}
+                      placeholder="1:123456:web:abc..."
+                      autoComplete="off"
+                    />
+                  </div>
+
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    onClick={handleSaveFirebaseConfig}
+                    disabled={savingFirebaseConfig}
+                  >
+                    {savingFirebaseConfig ? "Saving..." : "Save config"}
+                  </Button>
+                </div>
               </AlertDescription>
             </Alert>
           )}
