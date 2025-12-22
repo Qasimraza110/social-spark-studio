@@ -8,7 +8,7 @@ import {
   GoogleAuthProvider,
   GithubAuthProvider,
   signInWithPopup,
-  updateProfile,
+  updateProfile,   
   sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
