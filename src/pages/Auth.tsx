@@ -141,7 +141,7 @@ export default function Auth() {
   const handleSaveFirebaseConfig = () => {
     setSavingFirebaseConfig(true);
     try {
-      const parsed = firebaseWebConfigSchema.parse(firebaseSetup);
+      const parsed = firebaseWebConfigSchema.parse(firebaseSetup) as FirebaseWebConfig;
       writeFirebaseWebConfig(parsed);
       toast.success("Firebase config saved. Reloading...");
       window.location.reload();
