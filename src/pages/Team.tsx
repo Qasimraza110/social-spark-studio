@@ -14,29 +14,36 @@ import { cn } from "@/lib/utils";
 
 const teamMembers = [
   { 
-    name: "Alex Johnson", 
-    email: "alex@example.com", 
+    name: "Qasim", 
+    email: "Qasim1212@gmail.com", 
     role: "Owner", 
     avatar: "AJ",
     status: "active"
   },
   { 
-    name: "Sarah Williams", 
-    email: "sarah@example.com", 
+    name: "Nimra Ghaffar", 
+    email: "nimra098098@gmail.com", 
     role: "Admin", 
     avatar: "SW",
     status: "active"
   },
   { 
-    name: "Mike Chen", 
-    email: "mike@example.com", 
+    name: "Ahmad Zain", 
+    email: "zain1212@gmail.com", 
     role: "Editor", 
     avatar: "MC",
     status: "active"
   },
   { 
-    name: "Emily Davis", 
-    email: "emily@example.com", 
+    name: "Ayesha", 
+    email: "ayesha@gmail.com", 
+    role: "Viewer", 
+    avatar: "ED",
+    status: "pending"
+  },
+    { 
+    name: "Uraiza", 
+    email: "Uraiza@gmail.com", 
     role: "Viewer", 
     avatar: "ED",
     status: "pending"

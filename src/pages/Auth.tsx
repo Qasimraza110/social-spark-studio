@@ -3,12 +3,10 @@ import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Zap, Mail, Lock, User, ArrowLeft, Eye, EyeOff, AlertTriangle } from "lucide-react";
+import { Zap, Mail, Lock, User, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
-import { firebaseConfigured, firebaseConfigMissingFields } from "@/lib/firebase";
-import { readFirebaseWebConfig, writeFirebaseWebConfig, type FirebaseWebConfig } from "@/lib/firebaseWebConfig";
+
 import { z } from "zod";
 
 const authSchema = z.object({
@@ -17,12 +15,7 @@ const authSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
-const firebaseWebConfigSchema = z.object({
-  apiKey: z.string().min(1, "API key is required"),
-  authDomain: z.string().min(1, "Auth domain is required"),
-  projectId: z.string().min(1, "Project ID is required"),
-  appId: z.string().min(1, "App ID is required"),
-});
+
 
 export default function Auth() {
   const [searchParams] = useSearchParams();
@@ -32,22 +25,12 @@ export default function Auth() {
   const [isSignUp, setIsSignUp] = useState(searchParams.get("mode") === "signup");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [savingFirebaseConfig, setSavingFirebaseConfig] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [firebaseSetup, setFirebaseSetup] = useState<FirebaseWebConfig>(() => {
-    const existing = readFirebaseWebConfig();
-    return {
-      apiKey: existing?.apiKey ?? "",
-      authDomain: existing?.authDomain ?? "",
-      projectId: existing?.projectId ?? "",
-      appId: existing?.appId ?? "",
-    };
-  });
 
   useEffect(() => {
     document.title = isSignUp ? "Sign up | ContentAI" : "Sign in | ContentAI";
@@ -97,8 +80,8 @@ export default function Auth() {
         toast.success("Welcome back!");
       }
       navigate("/dashboard");
-    } catch (error: any) {
-      const errorMessage = getFirebaseErrorMessage(error.code);
+    } catch (error: unknown) {
+      const errorMessage = getFirebaseErrorMessage((error as { code: string }).code);
       toast.error(errorMessage);
     } finally {
       setLoading(false);
@@ -110,8 +93,8 @@ export default function Auth() {
       await signInWithGoogle();
       toast.success("Signed in with Google!");
       navigate("/dashboard");
-    } catch (error: any) {
-      toast.error(getFirebaseErrorMessage(error.code));
+    } catch (error: unknown) {
+      toast.error(getFirebaseErrorMessage((error as { code: string }).code));
     }
   };
 
@@ -120,8 +103,8 @@ export default function Auth() {
       await signInWithGithub();
       toast.success("Signed in with GitHub!");
       navigate("/dashboard");
-    } catch (error: any) {
-      toast.error(getFirebaseErrorMessage(error.code));
+    } catch (error: unknown) {
+      toast.error(getFirebaseErrorMessage((error as { code: string }).code));
     }
   };
 
@@ -133,28 +116,12 @@ export default function Auth() {
     try {
       await resetPassword(formData.email);
       toast.success("Password reset email sent!");
-    } catch (error: any) {
-      toast.error(getFirebaseErrorMessage(error.code));
+    } catch (error: unknown) {
+      toast.error(getFirebaseErrorMessage((error as { code: string }).code));
     }
   };
 
-  const handleSaveFirebaseConfig = () => {
-    setSavingFirebaseConfig(true);
-    try {
-      const parsed = firebaseWebConfigSchema.parse(firebaseSetup) as FirebaseWebConfig;
-      writeFirebaseWebConfig(parsed);
-      toast.success("Firebase config saved. Reloading...");
-      window.location.reload();
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        toast.error(error.errors[0]?.message ?? "Please fill in all Firebase fields.");
-        return;
-      }
-      toast.error("Could not save Firebase config.");
-    } finally {
-      setSavingFirebaseConfig(false);
-    }
-  };
+
 
   const getFirebaseErrorMessage = (code: string): string => {
     switch (code) {
@@ -190,102 +157,28 @@ export default function Auth() {
   return (
     <div className="min-h-screen bg-background flex flex-col lg:flex-row">
       {/* Left Panel - Form */}
-      <div className="flex-1 flex flex-col justify-center px-4 sm:px-8 md:px-16 lg:px-24 py-8 lg:py-0">
-        <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 lg:mb-8 w-fit">
+      <div className="flex-1 flex flex-col justify-center px-4 sm:px-6 md:px-8 lg:px-24 py-4 sm:py-8 lg:py-0">
+        <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-4 sm:mb-6 lg:mb-8 w-fit">
           <ArrowLeft className="h-4 w-4" />
-          <span className="text-sm sm:text-base">Back to home</span>
+          <span className="text-sm">Back to home</span>
         </Link>
 
         <div className="w-full max-w-md mx-auto lg:mx-0">
-          <div className="flex items-center gap-2 mb-6 lg:mb-8">
+          <div className="flex items-center gap-2 mb-4 sm:mb-6 lg:mb-8">
             <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent">
               <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" />
             </div>
-            <span className="font-display text-xl sm:text-2xl font-bold gradient-text">ContentAI</span>
+            <span className="font-display text-lg sm:text-xl lg:text-2xl font-bold gradient-text">ContentAI</span>
           </div>
 
-          <h1 className="font-display text-2xl sm:text-3xl font-bold mb-2">
+          <h1 className="font-display text-xl sm:text-2xl lg:text-3xl font-bold mb-2">
             {isSignUp ? "Create your account" : "Welcome back"}
           </h1>
-          <p className="text-sm sm:text-base text-muted-foreground mb-6 lg:mb-8">
+          <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 lg:mb-8">
             {isSignUp ? "Start your journey to automated content distribution" : "Sign in to access your dashboard"}
           </p>
 
-          {!firebaseConfigured && (
-            <Alert variant="destructive" className="mb-4">
-              <AlertTriangle className="h-4 w-4" />
-              <AlertTitle>Firebase not configured</AlertTitle>
-              <AlertDescription>
-                Add your Firebase Web App config (API key, Auth domain, Project ID, App ID) to enable login.
-                {" "}
-                Missing:{" "}
-                {[
-                  firebaseConfigMissingFields.apiKey ? "API key" : null,
-                  firebaseConfigMissingFields.authDomain ? "Auth domain" : null,
-                  firebaseConfigMissingFields.projectId ? "Project ID" : null,
-                  firebaseConfigMissingFields.appId ? "App ID" : null,
-                ]
-                  .filter(Boolean)
-                  .join(", ")}
 
-                <div className="mt-4 grid gap-3">
-                  <div className="grid gap-2">
-                    <Label htmlFor="fb-api-key">API key</Label>
-                    <Input
-                      id="fb-api-key"
-                      value={firebaseSetup.apiKey}
-                      onChange={(e) => setFirebaseSetup((v) => ({ ...v, apiKey: e.target.value }))}
-                      placeholder="AIza..."
-                      autoComplete="off"
-                    />
-                  </div>
-
-                  <div className="grid gap-2">
-                    <Label htmlFor="fb-auth-domain">Auth domain</Label>
-                    <Input
-                      id="fb-auth-domain"
-                      value={firebaseSetup.authDomain}
-                      onChange={(e) => setFirebaseSetup((v) => ({ ...v, authDomain: e.target.value }))}
-                      placeholder="your-project.firebaseapp.com"
-                      autoComplete="off"
-                    />
-                  </div>
-
-                  <div className="grid gap-2">
-                    <Label htmlFor="fb-project-id">Project ID</Label>
-                    <Input
-                      id="fb-project-id"
-                      value={firebaseSetup.projectId}
-                      onChange={(e) => setFirebaseSetup((v) => ({ ...v, projectId: e.target.value }))}
-                      placeholder="your-project-id"
-                      autoComplete="off"
-                    />
-                  </div>
-
-                  <div className="grid gap-2">
-                    <Label htmlFor="fb-app-id">App ID</Label>
-                    <Input
-                      id="fb-app-id"
-                      value={firebaseSetup.appId}
-                      onChange={(e) => setFirebaseSetup((v) => ({ ...v, appId: e.target.value }))}
-                      placeholder="1:123456:web:abc..."
-                      autoComplete="off"
-                    />
-                  </div>
-
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    size="sm"
-                    onClick={handleSaveFirebaseConfig}
-                    disabled={savingFirebaseConfig}
-                  >
-                    {savingFirebaseConfig ? "Saving..." : "Save config"}
-                  </Button>
-                </div>
-              </AlertDescription>
-            </Alert>
-          )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {isSignUp && (
@@ -357,7 +250,7 @@ export default function Auth() {
               </div>
             )}
 
-            <Button type="submit" variant="gradient" className="w-full" disabled={loading || !firebaseConfigured}>
+            <Button type="submit" variant="gradient" className="w-full" disabled={loading}>
               {loading ? "Please wait..." : isSignUp ? "Create Account" : "Sign In"}
             </Button>
           </form>
@@ -376,7 +269,6 @@ export default function Auth() {
               variant="outline"
               className="gap-2"
               onClick={handleGoogleSignIn}
-              disabled={!firebaseConfigured}
             >
               <svg className="h-4 w-4" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -390,7 +282,6 @@ export default function Auth() {
               variant="outline"
               className="gap-2"
               onClick={handleGithubSignIn}
-              disabled={!firebaseConfigured}
             >
               <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>

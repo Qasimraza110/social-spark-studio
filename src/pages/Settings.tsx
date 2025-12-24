@@ -28,17 +28,17 @@ export default function Settings() {
 
   return (
     <DashboardLayout>
-      <div className="p-8">
-        <div className="mb-8">
-          <h1 className="font-display text-3xl font-bold">Settings</h1>
-          <p className="text-muted-foreground mt-1">
+      <div className="p-4 md:p-8">
+        <div className="mb-6 md:mb-8">
+          <h1 className="font-display text-2xl md:text-3xl font-bold">Settings</h1>
+          <p className="text-muted-foreground mt-1 text-sm md:text-base">
             Manage your account settings and preferences.
           </p>
         </div>
 
-        <div className="flex gap-8">
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
           {/* Sidebar */}
-          <div className="w-56 space-y-1">
+          <div className="w-full lg:w-56 space-y-1">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -72,22 +72,23 @@ export default function Settings() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Full Name</Label>
-                    <Input defaultValue="Alex Johnson" />
+                    <Input defaultValue="Qasim Raza" />
                   </div>
                   <div className="space-y-2">
                     <Label>Username</Label>
-                    <Input defaultValue="alexjohnson" />
+                    <Input defaultValue="qasimraza" />
                   </div>
                   <div className="space-y-2">
                     <Label>Email</Label>
-                    <Input defaultValue="alex@example.com" type="email" />
+                    <Input defaultValue="qasim1212@gmail.com" type="email" />
                   </div>
                   <div className="space-y-2">
                     <Label>Time Zone</Label>
                     <select className="w-full rounded-lg bg-secondary/50 border border-border p-2.5 text-sm">
-                      <option>Eastern Time (ET)</option>
-                      <option>Pacific Time (PT)</option>
-                      <option>UTC</option>
+                      <option>Pakistan Standard Time (PKT)</option>
+<option>Eastern Time (ET)</option>
+<option>Pacific Time (PT)</option>
+<option>UTC</option>
                     </select>
                   </div>
                 </div>

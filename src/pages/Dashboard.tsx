@@ -51,8 +51,8 @@ export default function Dashboard() {
   return (
     <DashboardLayout>
       {/* Header */}
-      <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background/80 backdrop-blur-sm px-8">
-        <div className="relative w-80">
+      <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background/80 backdrop-blur-sm px-4 md:px-8">
+        <div className="relative flex-1 max-w-xs md:max-w-sm">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
@@ -60,7 +60,7 @@ export default function Dashboard() {
             className="w-full rounded-lg bg-secondary/50 py-2 pl-10 pr-4 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/50"
           />
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
           <Button variant="ghost" size="icon" className="relative">
             <Bell className="h-5 w-5" />
             <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-destructive" />
@@ -70,19 +70,19 @@ export default function Dashboard() {
       </header>
 
       {/* Content */}
-      <div className="p-8">
+      <div className="p-4 md:p-8">
         {/* Welcome */}
         <div className="mb-8">
-          <h1 className="font-display text-3xl font-bold">
+          <h1 className="font-display text-2xl md:text-3xl font-bold">
             Welcome back, <span className="gradient-text">Creator</span>
           </h1>
-          <p className="mt-1 text-muted-foreground">
+          <p className="mt-1 text-muted-foreground text-sm md:text-base">
             Here's what's happening with your content today.
           </p>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {stats.map((stat, index) => (
             <StatsCard key={stat.title} {...stat} delay={index * 100} />
           ))}
@@ -91,7 +91,7 @@ export default function Dashboard() {
         {/* Platforms */}
         <div className="mb-8">
           <h2 className="font-display text-xl font-semibold mb-4">Connected Platforms</h2>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {platforms.map((platform, index) => (
               <PlatformCard key={platform.name} {...platform} delay={index * 100 + 200} />
             ))}
@@ -99,8 +99,8 @@ export default function Dashboard() {
         </div>
 
         {/* Main Grid */}
-        <div className="grid grid-cols-3 gap-6">
-          <div className="col-span-2 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-6">
             <UploadZone />
             <RecentContent />
           </div>
