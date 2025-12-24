@@ -36,16 +36,16 @@ const topContent = [
 export default function Analytics() {
   return (
     <DashboardLayout>
-      <div className="p-8">
-        <div className="mb-8">
-          <h1 className="font-display text-3xl font-bold">Analytics</h1>
-          <p className="text-muted-foreground mt-1">
+      <div className="p-4 md:p-8">
+        <div className="mb-6 md:mb-8">
+          <h1 className="font-display text-2xl md:text-3xl font-bold">Analytics</h1>
+          <p className="text-muted-foreground mt-1 text-sm md:text-base">
             Track your content performance across all platforms.
           </p>
         </div>
 
         {/* Overview Stats */}
-        <div className="grid grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 md:mb-8">
           {[
             { label: "Total Views", value: "2.4M", change: "+12.5%", icon: Eye, positive: true },
             { label: "Engagement", value: "186K", change: "+8.3%", icon: Heart, positive: true },
@@ -66,11 +66,11 @@ export default function Analytics() {
           ))}
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           {/* Views Chart */}
-          <div className="lg:col-span-2 glass-card rounded-xl p-6">
+          <div className="lg:col-span-2 glass-card rounded-xl p-4 md:p-6">
             <h3 className="font-display text-lg font-semibold mb-6">Views Over Time</h3>
-            <div className="h-[300px]">
+            <div className="h-[250px] md:h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={viewsData}>
                   <defs>

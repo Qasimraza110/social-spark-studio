@@ -38,23 +38,23 @@ const upcomingPosts = [
 export default function Schedule() {
   return (
     <DashboardLayout>
-      <div className="p-8">
-        <div className="flex items-center justify-between mb-8">
+      <div className="p-4 md:p-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
           <div>
-            <h1 className="font-display text-3xl font-bold">Content Schedule</h1>
-            <p className="text-muted-foreground mt-1">
+            <h1 className="font-display text-2xl md:text-3xl font-bold">Content Schedule</h1>
+            <p className="text-muted-foreground mt-1 text-sm md:text-base">
               Plan and schedule your content across all platforms.
             </p>
           </div>
-          <Button variant="gradient" className="gap-2">
+          <Button variant="gradient" className="gap-2 w-full sm:w-auto">
             <Plus className="h-4 w-4" />
             Schedule Post
           </Button>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Calendar */}
-          <div className="lg:col-span-2 glass-card rounded-xl p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+          {/* Calendar */ }
+          <div className="lg:col-span-2 glass-card rounded-xl p-4 md:p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-display text-xl font-semibold">{currentMonth}</h2>
               <div className="flex items-center gap-2">

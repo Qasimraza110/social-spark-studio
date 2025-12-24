@@ -36,7 +36,7 @@ export default function Settings() {
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Sidebar */}
           <div className="w-full lg:w-56 space-y-1">
             {tabs.map((tab) => (
@@ -57,14 +57,14 @@ export default function Settings() {
           </div>
 
           {/* Content */}
-          <div className="flex-1 glass-card rounded-xl p-6">
+          <div className="flex-1 glass-card rounded-xl p-4 md:p-6">
             {activeTab === "profile" && (
               <div className="space-y-6">
                 <h3 className="font-display text-lg font-semibold">Profile Settings</h3>
                 
                 <div className="flex items-center gap-6">
                   <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-2xl font-bold text-primary-foreground">
-                    AJ
+                    QR
                   </div>
                   <Button variant="outline">Change Avatar</Button>
                 </div>

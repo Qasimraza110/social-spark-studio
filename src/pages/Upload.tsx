@@ -67,15 +67,15 @@ export default function UploadPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-8">
-        <div className="mb-8">
-          <h1 className="font-display text-3xl font-bold">Upload Content</h1>
-          <p className="text-muted-foreground mt-1">
+      <div className="p-4 md:p-8">
+        <div className="mb-6 md:mb-8">
+          <h1 className="font-display text-2xl md:text-3xl font-bold">Upload Content</h1>
+          <p className="text-muted-foreground mt-1 text-sm md:text-base">
             Upload your video and let AI optimize it for all platforms.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           {/* Upload Zone */}
           <div className="space-y-6">
             <div className="glass-card rounded-xl p-6">

@@ -110,30 +110,30 @@ export default function Content() {
 
   return (
     <DashboardLayout>
-      <div className="p-8">
-        <div className="flex items-center justify-between mb-8">
+      <div className="p-4 md:p-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
           <div>
-            <h1 className="font-display text-3xl font-bold">Content Library</h1>
-            <p className="text-muted-foreground mt-1">
+            <h1 className="font-display text-2xl md:text-3xl font-bold">Content Library</h1>
+            <p className="text-muted-foreground mt-1 text-sm md:text-base">
               Manage all your uploaded content in one place.
             </p>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <div className="relative w-64">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
+            <div className="relative flex-1 sm:flex-initial sm:w-64">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input placeholder="Search content..." className="pl-10" />
             </div>
-            <div className="flex items-center gap-1 rounded-lg bg-secondary p-1">
+            <div className="flex items-center gap-1 rounded-lg bg-secondary p-1 overflow-x-auto">
               {["all", "published", "scheduled", "draft"].map((f) => (
                 <button
                   key={f}
                   onClick={() => setFilter(f)}
                   className={cn(
-                    "px-3 py-1.5 rounded-md text-sm font-medium capitalize transition-colors",
+                    "px-3 py-1.5 rounded-md text-sm font-medium capitalize transition-colors whitespace-nowrap",
                     filter === f ? "bg-background text-foreground" : "text-muted-foreground hover:text-foreground"
                   )}
                 >
