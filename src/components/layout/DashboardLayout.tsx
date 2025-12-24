@@ -105,7 +105,7 @@ export function DashboardLayout({ children, sidebarOpen: propSidebarOpen, setSid
                 <span className="font-display text-xl font-bold gradient-text">ContentAI</span>
               )}
             </Link>
-            <Button
+            {/* <Button
               variant="ghost"
               size="icon"
               onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -120,7 +120,7 @@ export function DashboardLayout({ children, sidebarOpen: propSidebarOpen, setSid
               className="hidden md:flex"
             >
               <Menu className="h-4 w-4" />
-            </Button>
+            </Button> */}
           </div>
 
           {/* Navigation */}

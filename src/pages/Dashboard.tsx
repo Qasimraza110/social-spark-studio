@@ -56,10 +56,11 @@ export default function Dashboard() {
     const checkMobile = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
-      if (mobile) {
+      if (!mobile) {
+        setSidebarOpen(true); // Open by default on desktop
+      } else {
         setSidebarOpen(false); // Closed by default on mobile
       }
-      // On desktop, keep current state (don't force open)
     };
 
     checkMobile();
@@ -76,7 +77,7 @@ export default function Dashboard() {
       {/* Header */}
       <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background/80 backdrop-blur-sm px-4 md:px-8">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" className="md:flex" onClick={toggleSidebar}>
+          <Button variant="ghost" size="icon" className="md:hidden" onClick={toggleSidebar}>
             <Menu className="h-5 w-5" />
           </Button>
           <div className="relative flex-1 max-w-xs md:max-w-sm">
