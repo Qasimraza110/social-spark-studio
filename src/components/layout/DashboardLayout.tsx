@@ -29,14 +29,20 @@ const navItems = [
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
+  sidebarOpen?: boolean;
+  setSidebarOpen?: (open: boolean) => void;
 }
 
-export function DashboardLayout({ children }: DashboardLayoutProps) {
+export function DashboardLayout({ children, sidebarOpen: propSidebarOpen, setSidebarOpen: propSetSidebarOpen }: DashboardLayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const { logOut } = useAuth();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [internalSidebarOpen, setInternalSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+
+  // Use props if provided, otherwise use internal state
+  const sidebarOpen = propSidebarOpen !== undefined ? propSidebarOpen : internalSidebarOpen;
+  const setSidebarOpen = propSetSidebarOpen || setInternalSidebarOpen;
 
   useEffect(() => {
     const checkMobile = () => {
@@ -51,12 +57,15 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  }, [setSidebarOpen]);
 
   const handleLogout = async () => {
     try {
       await logOut();
-      navigate("/");
+      // Small delay to ensure auth state updates before navigation
+      setTimeout(() => {
+        navigate("/", { replace: true });
+      }, 100);
     } catch (error) {
       console.error("Logout failed:", error);
     }

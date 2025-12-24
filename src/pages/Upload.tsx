@@ -135,9 +135,9 @@ export default function UploadPage() {
             </div>
 
             {/* Platform Selection */}
-            <div className="glass-card rounded-xl p-6">
-              <h3 className="font-display text-lg font-semibold mb-4">Publish To</h3>
-              <div className="grid grid-cols-2 gap-3">
+            <div className="glass-card rounded-xl p-4 md:p-6">
+              <h3 className="font-display text-base md:text-lg font-semibold mb-4">Publish To</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {platforms.map((platform) => (
                   <button
                     key={platform.id}

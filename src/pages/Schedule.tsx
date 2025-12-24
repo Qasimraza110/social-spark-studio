@@ -67,47 +67,52 @@ export default function Schedule() {
               </div>
             </div>
 
-            {/* Days header */}
-            <div className="grid grid-cols-7 gap-1 mb-2">
-              {days.map(day => (
-                <div key={day} className="text-center text-sm text-muted-foreground py-2">
-                  {day}
+            {/* Calendar Container - Scrollable on mobile */}
+            <div className="overflow-x-auto md:overflow-visible">
+              <div className="min-w-[280px] md:min-w-0">
+                {/* Days header */}
+                <div className="grid grid-cols-7 gap-1 mb-2">
+                  {days.map(day => (
+                    <div key={day} className="text-center text-xs md:text-sm text-muted-foreground py-2">
+                      {day}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
 
-            {/* Calendar grid */}
-            <div className="grid grid-cols-7 gap-1">
-              {calendarDays.map((item, i) => (
-                <div
-                  key={i}
-                  className={cn(
-                    "min-h-[100px] p-2 rounded-lg border border-transparent hover:border-border transition-colors cursor-pointer",
-                    !item.isCurrentMonth && "opacity-30",
-                    item.isToday && "bg-primary/10 border-primary/30"
-                  )}
-                >
-                  <span className={cn(
-                    "text-sm",
-                    item.isToday && "text-primary font-semibold"
-                  )}>
-                    {item.day}
-                  </span>
-                  <div className="mt-1 space-y-1">
-                    {item.events.map((event, j) => (
-                      <div
-                        key={j}
-                        className={cn(
-                          "text-xs p-1.5 rounded border-l-2 truncate",
-                          platformColors[event.platform]
-                        )}
-                      >
-                        {event.title}
+                {/* Calendar grid */}
+                <div className="grid grid-cols-7 gap-1">
+                  {calendarDays.map((item, i) => (
+                    <div
+                      key={i}
+                      className={cn(
+                        "min-h-[80px] md:min-h-[100px] p-1 md:p-2 rounded-lg border border-transparent hover:border-border transition-colors cursor-pointer",
+                        !item.isCurrentMonth && "opacity-30",
+                        item.isToday && "bg-primary/10 border-primary/30"
+                      )}
+                    >
+                      <span className={cn(
+                        "text-xs md:text-sm",
+                        item.isToday && "text-primary font-semibold"
+                      )}>
+                        {item.day}
+                      </span>
+                      <div className="mt-1 space-y-1">
+                        {item.events.map((event, j) => (
+                          <div
+                            key={j}
+                            className={cn(
+                              "text-xs p-1 rounded border-l-2 truncate",
+                              platformColors[event.platform]
+                            )}
+                          >
+                            {event.title}
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
           </div>
 

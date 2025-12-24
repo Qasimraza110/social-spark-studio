@@ -1,4 +1,4 @@
-import { Eye, Heart, Users, Video, Bell, Search } from "lucide-react";
+import { Eye, Heart, Users, Video, Bell, Search, Menu } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { PlatformCard } from "@/components/dashboard/PlatformCard";
@@ -7,6 +7,7 @@ import { RecentContent } from "@/components/dashboard/RecentContent";
 import { AIInsights } from "@/components/dashboard/AIInsights";
 import { SchedulePreview } from "@/components/dashboard/SchedulePreview";
 import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 
 // Platform icons as SVG components
 const YouTubeIcon = () => (
@@ -48,17 +49,44 @@ const platforms = [
 ];
 
 export default function Dashboard() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (mobile) {
+        setSidebarOpen(false); // Closed by default on mobile
+      }
+      // On desktop, keep current state (don't force open)
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
   return (
-    <DashboardLayout>
+    <DashboardLayout sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}>
       {/* Header */}
       <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background/80 backdrop-blur-sm px-4 md:px-8">
-        <div className="relative flex-1 max-w-xs md:max-w-sm">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Search content, analytics..."
-            className="w-full rounded-lg bg-secondary/50 py-2 pl-10 pr-4 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/50"
-          />
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="icon" className="md:flex" onClick={toggleSidebar}>
+            <Menu className="h-5 w-5" />
+          </Button>
+          <div className="relative flex-1 max-w-xs md:max-w-sm">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Search content, analytics..."
+              className="w-full rounded-lg bg-secondary/50 py-2 pl-10 pr-4 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/50"
+            />
+          </div>
         </div>
         <div className="flex items-center gap-2 md:gap-4">
           <Button variant="ghost" size="icon" className="relative">

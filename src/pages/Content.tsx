@@ -162,7 +162,7 @@ export default function Content() {
 
         {/* Content Grid/List */}
         {viewMode === "grid" ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {filteredContent.map((item) => (
               <div key={item.id} className="glass-card rounded-xl overflow-hidden group">
                 <div className="relative aspect-video">
@@ -178,15 +178,15 @@ export default function Content() {
                     </Button>
                   </div>
                   <span className={cn(
-                    "absolute top-3 right-3 text-xs px-2 py-1 rounded capitalize",
+                    "absolute top-2 right-2 md:top-3 md:right-3 text-xs px-2 py-1 rounded capitalize",
                     statusColors[item.status]
                   )}>
                     {item.status}
                   </span>
                 </div>
-                <div className="p-4">
+                <div className="p-3 md:p-4">
                   <h3 className="font-medium text-sm mb-2 line-clamp-2">{item.title}</h3>
-                  <div className="flex items-center gap-2 mb-3">
+                  <div className="flex flex-wrap items-center gap-1 md:gap-2 mb-3">
                     {item.platforms.map((platform) => (
                       <span
                         key={platform}
@@ -197,7 +197,7 @@ export default function Content() {
                     ))}
                   </div>
                   <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 md:gap-3">
                       <span className="flex items-center gap-1">
                         <Eye className="h-3 w-3" />
                         {item.views}
@@ -214,34 +214,20 @@ export default function Content() {
             ))}
           </div>
         ) : (
-          <div className="glass-card rounded-xl overflow-hidden">
-            <table className="w-full">
-              <thead>
-                <tr className="text-left text-sm text-muted-foreground border-b border-border">
-                  <th className="p-4 font-medium">Content</th>
-                  <th className="p-4 font-medium">Platforms</th>
-                  <th className="p-4 font-medium">Status</th>
-                  <th className="p-4 font-medium">Views</th>
-                  <th className="p-4 font-medium">Engagement</th>
-                  <th className="p-4 font-medium">Date</th>
-                  <th className="p-4 font-medium"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredContent.map((item) => (
-                  <tr key={item.id} className="border-b border-border/50 hover:bg-secondary/20">
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={item.thumbnail}
-                          alt={item.title}
-                          className="w-16 h-10 rounded object-cover"
-                        />
-                        <span className="font-medium text-sm">{item.title}</span>
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-1">
+          <>
+            {/* Mobile Card Layout */}
+            <div className="block md:hidden space-y-3">
+              {filteredContent.map((item) => (
+                <div key={item.id} className="glass-card rounded-xl p-4">
+                  <div className="flex items-start gap-3 mb-3">
+                    <img
+                      src={item.thumbnail}
+                      alt={item.title}
+                      className="w-16 h-12 rounded object-cover flex-shrink-0"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-sm mb-1 line-clamp-2">{item.title}</h3>
+                      <div className="flex flex-wrap items-center gap-1 mb-2">
                         {item.platforms.map((platform) => (
                           <span
                             key={platform}
@@ -251,36 +237,103 @@ export default function Content() {
                           </span>
                         ))}
                       </div>
-                    </td>
-                    <td className="p-4">
-                      <span className={cn("text-xs px-2 py-1 rounded capitalize", statusColors[item.status])}>
+                      <span className={cn("inline-block text-xs px-2 py-1 rounded capitalize mb-2", statusColors[item.status])}>
                         {item.status}
                       </span>
-                    </td>
-                    <td className="p-4 text-sm">{item.views}</td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1">
-                          <Heart className="h-3 w-3" />
-                          {item.likes}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <MessageCircle className="h-3 w-3" />
-                          {item.comments}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="p-4 text-sm text-muted-foreground">{item.date}</td>
-                    <td className="p-4">
-                      <Button variant="ghost" size="icon">
-                        <MoreVertical className="h-4 w-4" />
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <div className="flex items-center gap-3">
+                      <span className="flex items-center gap-1">
+                        <Eye className="h-3 w-3" />
+                        {item.views}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Heart className="h-3 w-3" />
+                        {item.likes}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <MessageCircle className="h-3 w-3" />
+                        {item.comments}
+                      </span>
+                    </div>
+                    <span>{item.date}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop Table Layout */}
+            <div className="hidden md:block glass-card rounded-xl overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[600px]">
+                  <thead>
+                    <tr className="text-left text-sm text-muted-foreground border-b border-border">
+                      <th className="p-4 font-medium">Content</th>
+                      <th className="p-4 font-medium">Platforms</th>
+                      <th className="p-4 font-medium">Status</th>
+                      <th className="p-4 font-medium">Views</th>
+                      <th className="p-4 font-medium">Engagement</th>
+                      <th className="p-4 font-medium">Date</th>
+                      <th className="p-4 font-medium"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredContent.map((item) => (
+                      <tr key={item.id} className="border-b border-border/50 hover:bg-secondary/20">
+                        <td className="p-4">
+                          <div className="flex items-center gap-3">
+                            <img
+                              src={item.thumbnail}
+                              alt={item.title}
+                              className="w-16 h-10 rounded object-cover"
+                            />
+                            <span className="font-medium text-sm">{item.title}</span>
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          <div className="flex items-center gap-1">
+                            {item.platforms.map((platform) => (
+                              <span
+                                key={platform}
+                                className={cn("text-xs px-1.5 py-0.5 rounded capitalize", platformColors[platform])}
+                              >
+                                {platform}
+                              </span>
+                            ))}
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          <span className={cn("text-xs px-2 py-1 rounded capitalize", statusColors[item.status])}>
+                            {item.status}
+                          </span>
+                        </td>
+                        <td className="p-4 text-sm">{item.views}</td>
+                        <td className="p-4">
+                          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                            <span className="flex items-center gap-1">
+                              <Heart className="h-3 w-3" />
+                              {item.likes}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <MessageCircle className="h-3 w-3" />
+                              {item.comments}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="p-4 text-sm text-muted-foreground">{item.date}</td>
+                        <td className="p-4">
+                          <Button variant="ghost" size="icon">
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </>
         )}
       </div>
     </DashboardLayout>

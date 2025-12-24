@@ -45,22 +45,22 @@ export default function Analytics() {
         </div>
 
         {/* Overview Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 md:mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
           {[
             { label: "Total Views", value: "2.4M", change: "+12.5%", icon: Eye, positive: true },
             { label: "Engagement", value: "186K", change: "+8.3%", icon: Heart, positive: true },
             { label: "Shares", value: "24.8K", change: "+15.2%", icon: Share2, positive: true },
             { label: "New Followers", value: "+5.2K", change: "+4.1%", icon: Users, positive: true },
           ].map((stat, i) => (
-            <div key={i} className="glass-card rounded-xl p-6">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-muted-foreground">{stat.label}</span>
-                <stat.icon className="h-4 w-4 text-muted-foreground" />
+            <div key={i} className="glass-card rounded-xl p-3 md:p-6">
+              <div className="flex items-center justify-between mb-1 md:mb-2">
+                <span className="text-xs md:text-sm text-muted-foreground">{stat.label}</span>
+                <stat.icon className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
               </div>
-              <p className="text-3xl font-bold font-display">{stat.value}</p>
-              <p className={`text-sm mt-1 flex items-center gap-1 ${stat.positive ? 'text-emerald-400' : 'text-destructive'}`}>
-                {stat.positive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                {stat.change} from last month
+              <p className="text-xl md:text-3xl font-bold font-display">{stat.value}</p>
+              <p className={`text-xs md:text-sm mt-1 flex items-center gap-1 ${stat.positive ? 'text-emerald-400' : 'text-destructive'}`}>
+                {stat.positive ? <TrendingUp className="h-2 w-2 md:h-3 md:w-3" /> : <TrendingDown className="h-2 w-2 md:h-3 md:w-3" />}
+                {stat.change}
               </p>
             </div>
           ))}
@@ -121,40 +121,67 @@ export default function Analytics() {
         </div>
 
         {/* Top Content */}
-        <div className="mt-8 glass-card rounded-xl p-6">
+        <div className="mt-6 md:mt-8">
           <h3 className="font-display text-lg font-semibold mb-4">Top Performing Content</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="text-left text-sm text-muted-foreground border-b border-border">
-                  <th className="pb-3 font-medium">Content</th>
-                  <th className="pb-3 font-medium">Platform</th>
-                  <th className="pb-3 font-medium">Views</th>
-                  <th className="pb-3 font-medium">Engagement</th>
-                </tr>
-              </thead>
-              <tbody>
-                {topContent.map((item, i) => (
-                  <tr key={i} className="border-b border-border/50 hover:bg-secondary/20">
-                    <td className="py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded bg-secondary flex items-center justify-center">
-                          <Play className="h-4 w-4 text-primary" />
-                        </div>
-                        <span className="font-medium">{item.title}</span>
-                      </div>
-                    </td>
-                    <td className="py-4">
-                      <span className="px-2 py-1 rounded bg-muted text-muted-foreground text-sm">
-                        {item.platform}
-                      </span>
-                    </td>
-                    <td className="py-4 font-medium">{item.views}</td>
-                    <td className="py-4 text-emerald-400">{item.engagement}</td>
+
+          {/* Mobile Card Layout */}
+          <div className="block md:hidden space-y-3">
+            {topContent.map((item, i) => (
+              <div key={i} className="glass-card rounded-xl p-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded bg-secondary flex items-center justify-center">
+                    <Play className="h-4 w-4 text-primary" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-medium text-sm line-clamp-2">{item.title}</h4>
+                    <span className="inline-block mt-1 px-2 py-1 rounded bg-muted text-muted-foreground text-xs">
+                      {item.platform}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="font-medium">{item.views}</span>
+                  <span className="text-emerald-400">{item.engagement}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop Table Layout */}
+          <div className="hidden md:block glass-card rounded-xl p-6">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="text-left text-sm text-muted-foreground border-b border-border">
+                    <th className="pb-3 font-medium">Content</th>
+                    <th className="pb-3 font-medium">Platform</th>
+                    <th className="pb-3 font-medium">Views</th>
+                    <th className="pb-3 font-medium">Engagement</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {topContent.map((item, i) => (
+                    <tr key={i} className="border-b border-border/50 hover:bg-secondary/20">
+                      <td className="py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded bg-secondary flex items-center justify-center">
+                            <Play className="h-4 w-4 text-primary" />
+                          </div>
+                          <span className="font-medium">{item.title}</span>
+                        </div>
+                      </td>
+                      <td className="py-4">
+                        <span className="px-2 py-1 rounded bg-muted text-muted-foreground text-sm">
+                          {item.platform}
+                        </span>
+                      </td>
+                      <td className="py-4 font-medium">{item.views}</td>
+                      <td className="py-4 text-emerald-400">{item.engagement}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
