@@ -10,7 +10,8 @@ import {
   Users,
   Zap,
   Menu,
-  LogOut
+  LogOut,
+  Briefcase
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,7 @@ const navItems = [
   { icon: Video, label: "Content", path: "/content" },
   { icon: Calendar, label: "Schedule", path: "/schedule" },
   { icon: BarChart3, label: "Analytics", path: "/analytics" },
+  { icon: Briefcase, label: "Job Search", path: "/job-search" },
   { icon: Users, label: "Team", path: "/team" },
   { icon: Settings, label: "Settings", path: "/settings" },
 ];
@@ -37,7 +39,10 @@ export function DashboardLayout({ children, sidebarOpen: propSidebarOpen, setSid
   const location = useLocation();
   const navigate = useNavigate();
   const { logOut } = useAuth();
-  const [internalSidebarOpen, setInternalSidebarOpen] = useState(false);
+  const [internalSidebarOpen, setInternalSidebarOpen] = useState(
+  window.innerWidth >= 768
+);
+
   const [isMobile, setIsMobile] = useState(false);
 
   // Use props if provided, otherwise use internal state
@@ -45,19 +50,16 @@ export function DashboardLayout({ children, sidebarOpen: propSidebarOpen, setSid
   const setSidebarOpen = propSetSidebarOpen || setInternalSidebarOpen;
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth >= 768) {
-        setSidebarOpen(true); // Open by default on desktop
-      } else {
-        setSidebarOpen(false); // Closed by default on mobile
-      }
-    };
+  const checkMobile = () => {
+    const mobile = window.innerWidth < 768;
+    setIsMobile(mobile);
+  };
 
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, [setSidebarOpen]);
+  checkMobile();
+  window.addEventListener("resize", checkMobile);
+  return () => window.removeEventListener("resize", checkMobile);
+}, []);
+
 
   const handleLogout = async () => {
     try {

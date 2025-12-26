@@ -52,21 +52,18 @@ export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  useEffect(() => {
-    const checkMobile = () => {
-      const mobile = window.innerWidth < 768;
-      setIsMobile(mobile);
-      if (!mobile) {
-        setSidebarOpen(true); // Open by default on desktop
-      } else {
-        setSidebarOpen(false); // Closed by default on mobile
-      }
-    };
+useEffect(() => {
+  const handleResize = () => {
+    const mobile = window.innerWidth < 768;
+    setIsMobile(mobile);
+    if (mobile) return setSidebarOpen(false);
+    setSidebarOpen(true);
+  };
 
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  handleResize();
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -120,7 +117,7 @@ export default function Dashboard() {
         {/* Platforms */}
         <div className="mb-8">
           <h2 className="font-display text-xl font-semibold mb-4">Connected Platforms</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {platforms.map((platform, index) => (
               <PlatformCard key={platform.name} {...platform} delay={index * 100 + 200} />
             ))}

@@ -110,7 +110,7 @@ export default function Content() {
 
   return (
     <DashboardLayout>
-      <div className="p-4 md:p-8">
+      <div className="p-4 md:p-8 pt-16 md:pt-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
           <div>
             <h1 className="font-display text-2xl md:text-3xl font-bold">Content Library</h1>

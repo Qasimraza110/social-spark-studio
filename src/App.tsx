@@ -11,6 +11,7 @@ import Upload from "./pages/Upload";
 import Content from "./pages/Content";
 import Schedule from "./pages/Schedule";
 import Analytics from "./pages/Analytics";
+import JobSearch from "./pages/JobSearch";
 import Team from "./pages/Team";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
@@ -33,6 +34,7 @@ function App() {
               <Route path="/content" element={<Content />} />
               <Route path="/schedule" element={<Schedule />} />
               <Route path="/analytics" element={<Analytics />} />
+              <Route path="/job-search" element={<JobSearch />} />
               <Route path="/team" element={<Team />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="*" element={<NotFound />} />
