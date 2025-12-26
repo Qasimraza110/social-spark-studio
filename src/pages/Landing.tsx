@@ -97,18 +97,19 @@ export default function Landing() {
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Automate your social media workflow with AI. Upload videos, generate optimized content, and distribute across all platforms in seconds.
           </p>
-          <div className="flex items-center justify-center gap-4">
-            <Link to="/auth?mode=signup">
-              <Button variant="gradient" size="lg" className="gap-2">
-                Start Free Trial
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-            <Button variant="outline" size="lg" className="gap-2">
-              <Play className="h-4 w-4" />
-              Watch Demo
-            </Button>
-          </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+  <Link to="/auth?mode=signup" className="w-full sm:w-auto">
+    <Button variant="gradient" size="lg" className="gap-2 w-full sm:w-auto">
+      Start Free Trial
+      <ArrowRight className="h-4 w-4" />
+    </Button>
+  </Link>
+  <Button variant="outline" size="lg" className="gap-2 w-full sm:w-auto">
+    <Play className="h-4 w-4" />
+    Watch Demo
+  </Button>
+</div>
+
         </div>
       </section>
 
@@ -184,21 +185,28 @@ export default function Landing() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-6">
-        <div className="container mx-auto">
-          <div className="glass-card rounded-2xl p-12 text-center bg-gradient-to-br from-primary/10 to-accent/10">
-            <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-              Ready to Transform Your Content Strategy?
-            </h2>
-            <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-              Join thousands of creators who are saving hours every week with ContentAI.
-            </p>
-            <Link to="/auth?mode=signup">
-              <Button variant="gradient" size="lg">Start Your Free Trial</Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+     <section className="py-20 px-6">
+  <div className="container mx-auto">
+    <div className="glass-card rounded-2xl p-12 text-center bg-gradient-to-br from-primary/10 to-accent/10">
+      <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
+        Ready to Transform Your Content Strategy?
+      </h2>
+      <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
+        Join thousands of creators who are saving hours every week with ContentAI.
+      </p>
+
+      {/* Centered button container */}
+      <div className="flex justify-center">
+        <Link to="/auth?mode=signup" className="w-full sm:w-auto">
+          <Button variant="gradient" size="lg" className="w-full sm:w-auto">
+            Start Your Free Trial
+          </Button>
+        </Link>
+      </div>
+    </div>
+  </div>
+</section>
+
 
       {/* Footer */}
       <footer className="border-t border-border py-8 px-6">
