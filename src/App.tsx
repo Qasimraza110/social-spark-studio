@@ -14,6 +14,7 @@ import Analytics from "./pages/Analytics";
 import JobSearch from "./pages/JobSearch";
 import Team from "./pages/Team";
 import Settings from "./pages/Settings";
+import Security from "./pages/Security";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ function App() {
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/job-search" element={<JobSearch />} />
               <Route path="/team" element={<Team />} />
+              <Route path="/security" element={<Security />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

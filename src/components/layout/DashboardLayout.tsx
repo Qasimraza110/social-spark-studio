@@ -11,7 +11,8 @@ import {
   Zap,
   Menu,
   LogOut,
-  Briefcase
+  Briefcase,
+  Shield
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,7 @@ const navItems = [
   { icon: BarChart3, label: "Analytics", path: "/analytics" },
   { icon: Briefcase, label: "Job Search", path: "/job-search" },
   { icon: Users, label: "Team", path: "/team" },
+  { icon: Shield, label: "Security", path: "/security" },
   { icon: Settings, label: "Settings", path: "/settings" },
 ];
 
