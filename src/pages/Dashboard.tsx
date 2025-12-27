@@ -1,4 +1,4 @@
-import { Eye, Heart, Users, Video, Bell, Search, Menu } from "lucide-react";
+import { Eye, Heart, Users, Video, Bell, Search, Menu, User, Settings, LogOut, HelpCircle } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { PlatformCard } from "@/components/dashboard/PlatformCard";
@@ -7,6 +7,9 @@ import { RecentContent } from "@/components/dashboard/RecentContent";
 import { AIInsights } from "@/components/dashboard/AIInsights";
 import { SchedulePreview } from "@/components/dashboard/SchedulePreview";
 import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useState, useEffect } from "react";
 
 // Platform icons as SVG components
@@ -48,6 +51,37 @@ const platforms = [
   { name: "LinkedIn", icon: <LinkedInIcon />, connected: false, followers: "", colorClass: "bg-linkedin/20" },
 ];
 
+const notifications = [
+  {
+    id: 1,
+    title: "New follower on Instagram",
+    message: "John Doe started following you",
+    time: "2 minutes ago",
+    unread: true,
+  },
+  {
+    id: 2,
+    title: "Video performance boost",
+    message: "Your TikTok video gained 500+ views in the last hour",
+    time: "1 hour ago",
+    unread: true,
+  },
+  {
+    id: 3,
+    title: "YouTube comment",
+    message: "Someone commented on your latest video: 'Great content!'",
+    time: "3 hours ago",
+    unread: false,
+  },
+  {
+    id: 4,
+    title: "Analytics update",
+    message: "Your weekly analytics report is ready",
+    time: "1 day ago",
+    unread: false,
+  },
+];
+
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -87,11 +121,75 @@ useEffect(() => {
           </div>
         </div>
         <div className="flex items-center gap-2 md:gap-4">
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="h-5 w-5" />
-            <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-destructive" />
-          </Button>
-          <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary to-accent" />
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="ghost" size="icon" className="relative">
+                <Bell className="h-5 w-5" />
+                <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-destructive" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 p-0" align="end">
+              <div className="p-4 border-b">
+                <h3 className="font-semibold text-sm">Notifications</h3>
+              </div>
+              <div className="max-h-96 overflow-y-auto">
+                {notifications.map((notification) => (
+                  <div
+                    key={notification.id}
+                    className={`p-4 border-b last:border-b-0 hover:bg-muted/50 cursor-pointer ${
+                      notification.unread ? "bg-muted/20" : ""
+                    }`}
+                  >
+                    <div className="flex justify-between items-start gap-2">
+                      <div className="flex-1">
+                        <h4 className="font-medium text-sm">{notification.title}</h4>
+                        <p className="text-xs text-muted-foreground mt-1">{notification.message}</p>
+                        <p className="text-xs text-muted-foreground mt-2">{notification.time}</p>
+                      </div>
+                      {notification.unread && (
+                        <div className="w-2 h-2 rounded-full bg-destructive flex-shrink-0 mt-1" />
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="p-4 border-t">
+                <Button variant="ghost" className="w-full text-sm">
+                  View all notifications
+                </Button>
+              </div>
+            </PopoverContent>
+          </Popover>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-9 w-9 rounded-full p-0">
+                <Avatar className="h-9 w-9">
+                  <AvatarFallback>QS</AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <User className="mr-2 h-4 w-4" />
+                Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Settings className="mr-2 h-4 w-4" />
+                Settings
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <HelpCircle className="mr-2 h-4 w-4" />
+                Help & Support
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="text-destructive">
+                <LogOut className="mr-2 h-4 w-4" />
+                Sign out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
 
